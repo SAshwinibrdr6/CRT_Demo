@@ -1,11 +1,14 @@
 *** Settings ***
-Library                 QForce
-Library                 QWeb
-Library                 String
+
+Documentation           New test suite
+Library                 QForce 
+Suite Setup             Open Browser    about:blank    chrome
+Suite Teardown          Close All Browsers
 
 *** Variables ***
-${home_url}               ${sf_login_url}/lightning/page/home
-
+${login_url}            https://login.salesforce.com
+${home_url}             https://login.salesforce.com/lightning/page/home
+${secret}               FU3KTO2OWY27HPVSPR7FPMCYODQ66ECT
 
 *** Keywords ***
 Setup Browser
@@ -21,13 +24,13 @@ End Suite
 Login
     [Documentation]                    Login to Salesforce Environment
     Set Library Search Order           QWeb                    QForce
-    GoTo                               ${sf_login_url}
-    TypeText                           Username                ${sf_username}            
-    TypeText                           Password                ${sf_password}   
+    GoTo                               ${login_url}
+    TypeText                           Username                     ashwinibrdr6807@agentforce.com   
+    TypeText                           Password                     Sammu@2025
     ClickText                          Log In
 
     #Login with MFA enabled
-    ${mfa_code}=           GetOTP                      sheetalchougule360@agentforce.com        ${sf_mfasecret}    ${sf_login_url}
+    ${mfa_code}=          GetOTP                      ashwinibrdr6807@agentforce.com         ${secret}    ${login_url}
     ${login_status} =     IsNoText                    Seller Home
     Run Keyword If        ${login_status}             TypeSecret             Verification Code           ${mfa_code}
     Run Keyword If        ${login_status}             ClickText              Verify

@@ -40,6 +40,6 @@ Home
     Set Library Search Order                          QWeb                   QForce
     GoTo                  ${home_url}
     ${login_status} =     IsNoText                    Seller Home
-    Run Keyword If        ${login_status}             Login
+    Run Keyword If        ${login_status}             Login to Salesforce
     ClickText             Home
     VerifyTitle           Home | Salesforce

@@ -22,7 +22,7 @@ End Suite
     Close All Browsers
 
 Login
-    [Documentation]                    Login to Salesforce Environment
+    [Documentation]                    Login to Salesforce
     Set Library Search Order           QWeb                    QForce
     GoTo                               ${login_url}
     TypeText                           Username                     ashwinibrdr6807@agentforce.com   

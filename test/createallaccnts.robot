@@ -14,7 +14,8 @@ Suite Teardown          Close All Browsers
 Test Template           Creating Account with Data
 
 *** Test Cases ***
-
+Home
+    Home
 Creating Account with Data ${account_name} ${type} ${annual_revenue} ${industry}
     # No implementation can be done under the Test Case. This should only have test case name
     # ClickText     ${account_name}
@@ -30,7 +31,7 @@ Creating Account with Data
     # The name of the keyword should match the Test Template Name
     [Arguments]       ${account_name}     ${type}     ${annual_revenue}     ${industry}
     
-    Home
+    
     ClickText          Accounts
     Clicktext          New
     UseModal           On

@@ -21,7 +21,7 @@ End Suite
     Set Library Search Order            QWeb                    QForce
     Close All Browsers
 
-Login
+Login to Salesforce
     [Documentation]                    Login to Salesforce
     Set Library Search Order           QWeb                    QForce
     GoTo                               ${login_url}

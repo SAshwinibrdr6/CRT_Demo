@@ -6,7 +6,7 @@ Documentation           New test suite
 Resource                ../resources/common.robot
 Library                 QForce 
 Library                 QWeb
-Library                 DataDriver                    reader_class=TestDataApi            name=Account_Data1.csv
+Library                 DataDriver                    reader_class=TestDataApi            name=Account_Data.csv
 
 
 Suite Setup             Open Browser    about:blank    chrome

@@ -1,14 +1,7 @@
 *** Settings ***
-
-Documentation           New test suite
-Library                 QForce 
-Suite Setup             Open Browser    about:blank    chrome
-Suite Teardown          Close All Browsers
-
-*** Variables ***
-${login_url}            https://login.salesforce.com
-${home_url}             https://login.salesforce.com/lightning/page/home
-${secret}               FU3KTO2OWY27HPVSPR7FPMCYODQ66ECT
+Library                 QForce
+Library                 QWeb
+Library                 String
 
 *** Keywords ***
 Setup Browser
@@ -22,24 +15,32 @@ End Suite
     Close All Browsers
 
 Login to Salesforce
-    [Documentation]                    Login to Salesforce
+    [Documentation]                    Login to Salesforce Environment
     Set Library Search Order           QWeb                    QForce
-    GoTo                               ${login_url}
-    TypeText                           Username                     ashwinibrdr6807@agentforce.com   
-    TypeText                           Password                     Sammu@2025
+    GoTo                               ${sf_login_url}
+    TypeText                           Username                ${sf_username}            
+    TypeText                           Password                ${sf_password}   
     ClickText                          Log In
 
     #Login with MFA enabled
-    ${mfa_code}=          GetOTP                      ashwinibrdr6807@agentforce.com         ${secret}    ${login_url}
-    ${login_status} =     IsNoText                    Seller Home
-    Run Keyword If        ${login_status}             TypeSecret             Verification Code           ${mfa_code}
-    Run Keyword If        ${login_status}             ClickText              Verify
+    ${MFA_Needed}=                     Run Keyword And Return Status                Should Not Be Equal        ${None}        ${sf_mfasecret}
+    Run Keyword If                     ${MFA_Needed}                                Generate MFA               ${sf_username}    ${sf_mfasecret}    ${sf_login_url}
+    
+Generate MFA
+    [Documentation]                    Retrieve the OTP and Geneate MFA then Login
+    [Arguments]                        ${username}=${sf_username}    ${secret_mfa}=${sf_mfasecret}    ${instance_url}=${sf_login_url}
+    ${mfa_code}=                       GetOTP                      ${username}        ${secret_mfa}    ${instance_url}
+    TypeSecret                         Verification Code           ${mfa_code}
+    ClickText                          Verify
 
-Home
-    [Documentation]       Navigate to homepage, login if needed
-    Set Library Search Order                          QWeb                   QForce
-    GoTo                  ${home_url}
-    ${login_status} =     IsNoText                    Seller Home
-    Run Keyword If        ${login_status}             Login to Salesforce
-    ClickText             Home
-    VerifyTitle           Home | Salesforce
+Create Unique Account
+    [Arguments]                        ${Account_Name}            ${Unique_Id}
+    ${unique_name}=                    Catenate                   ${Account_Name}  ${Unique_Id}
+    Launch App                         Sales
+    Click text                         Accounts
+    Click text                         New
+    UseModal                           On
+    Sleep                              2s
+    Wait Until Keyword Succeeds        1 min       5 sec    Type Text    Account Name    ${unique_name}
+    
+    RETURN                           ${unique_name}
